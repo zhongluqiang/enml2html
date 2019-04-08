@@ -5,13 +5,14 @@
 #include <string>
 using namespace std;
 
-const char *HEADER = "<!DOCTYPE html> \n"
-                     "<html>\n"
-                     "<head>\n"
-                     "<meta charset=\"utf-8\">\n"
-                     "<title>这是一篇印象笔记导出的笔记</title>\n"
-                     "</head>\n"
-                     "<body>\n";
+const char *HEADER =
+    "<!DOCTYPE html> \n"
+    "<html>\n"
+    "<head>\n"
+    "<meta charset=\"utf-8\">\n"
+    "<title>这是一篇印象笔记导出的笔记</title>\n"
+    "</head>\n"
+    "<body style=\"width:1000px; margin-left:auto; margin-right:auto;\">\n";
 const char *TAIL = "\n</body>\n</html>";
 
 // trim from start (in place)
@@ -229,12 +230,15 @@ int main(int argc, char *argv[]) {
     body = regex_replace(body, reg, "");
 
     /* 清除空标签 <xxx> <br/> </xxx> */
-    reg = "<([0-9a-zA-Z]+)[^>\\/]*?>[\\s]*?<br/>[\\s]*?<\\/\\1>";
-    body = regex_replace(body, reg, "");
+    /* 印象笔记原生笔记使用<div><br/></div>来表示空白行，所这条不能删除 */
+    // reg = "<([0-9a-zA-Z]+)[^>\\/]*?>[\\s]*?<br/>[\\s]*?<\\/\\1>";
+    // body = regex_replace(body, reg, "");
 
     /* 清理无用的<br/> */
-    reg = "<br\\/>";
-    body = regex_replace(body, reg, "");
+    /* 使用马克飞象编辑的笔记中的有序列表使用<br/>来进行换行，这一条不可以删除
+     */
+    // reg = "<br\\/>";
+    // body = regex_replace(body, reg, "");
 
     /* 压缩空白行，暂时还没想到行好的办法，todo...*/
     /* 下面的压缩语句有bug，处理pre标签时如果将内部的span标签之间的空格删除掉的话
